@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://7m0wdptkkqob"]
+
+[sub_resource type="Gradient" id="Gradient_0h0on"]
+colors = PackedColorArray(0.259259, 0.300781, 0.140629, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_x5hxi"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e80sh"]
+in_3d_space = true
+seamless = true
+normalize = false
+color_ramp = SubResource("Gradient_0h0on")
+noise = SubResource("FastNoiseLite_x5hxi")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vgmwa"]
+albedo_color = Color(0.231373, 0.607843, 0.129412, 1)
+albedo_texture = SubResource("NoiseTexture2D_e80sh")
+uv1_scale = Vector3(1000, 1000, 1000)
+
+[node name="Racetrack" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1000, 0, 0, 0, 0.2, 0, 0, 0, 1000, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_vgmwa")
+use_collision = true

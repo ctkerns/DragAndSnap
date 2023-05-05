@@ -1,0 +1,94 @@
+[gd_scene load_steps=12 format=3 uid="uid://ce4lhar1pxj1s"]
+
+[ext_resource type="PackedScene" uid="uid://7m0wdptkkqob" path="res://demos/car builder/Racetrack.tscn" id="1_6l7sx"]
+[ext_resource type="Script" path="res://demos/car builder/CarBuilder.gd" id="1_7jlud"]
+[ext_resource type="PackedScene" uid="uid://duegg2evk5pe2" path="res://demos/car builder/Vehicle.tscn" id="1_d6bgu"]
+[ext_resource type="PackedScene" uid="uid://cyyx8a43ka23s" path="res://demos/car builder/ModuleButton.tscn" id="4_f4nol"]
+
+[sub_resource type="Gradient" id="Gradient_4yeks"]
+offsets = PackedFloat32Array(0.598131, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dsl36"]
+seed = 350159
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pfrtm"]
+seamless = true
+color_ramp = SubResource("Gradient_4yeks")
+noise = SubResource("FastNoiseLite_dsl36")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a3xbx"]
+sky_top_color = Color(0.294118, 0.611765, 0.819608, 1)
+sky_cover = SubResource("NoiseTexture2D_pfrtm")
+
+[sub_resource type="Sky" id="Sky_0ggog"]
+sky_material = SubResource("ProceduralSkyMaterial_a3xbx")
+
+[sub_resource type="Environment" id="Environment_nlroh"]
+background_mode = 2
+sky = SubResource("Sky_0ggog")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bei3u"]
+albedo_color = Color(0.0823529, 0.0588235, 0.0588235, 1)
+metallic = 0.8
+roughness = 0.3
+
+[node name="CarBuilder" type="Node3D"]
+script = ExtResource("1_7jlud")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nlroh")
+
+[node name="Racetrack" parent="." instance=ExtResource("1_6l7sx")]
+
+[node name="Vehicle" parent="." instance=ExtResource("1_d6bgu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.823312, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.400509, 0.916293, 0, -0.916293, 0.400509, 0, 0, 0)
+
+[node name="BuildPlatform" type="CSGCylinder3D" parent="."]
+radius = 5.0
+height = 0.4
+sides = 32
+material = SubResource("StandardMaterial3D_bei3u")
+
+[node name="Pivot" type="Node3D" parent="BuildPlatform"]
+
+[node name="BuildCamera" type="Camera3D" parent="BuildPlatform/Pivot"]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 3, 5)
+current = true
+
+[node name="BuildScreen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BuildScreen"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_scroll_mode = 2
+vertical_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BuildScreen/ScrollContainer"]
+layout_mode = 2
+
+[node name="ModuleButton" parent="BuildScreen/ScrollContainer/HBoxContainer" instance=ExtResource("4_f4nol")]
+layout_mode = 2
+module = ExtResource("1_d6bgu")
+
+[node name="ToggleMode" type="Button" parent="BuildScreen"]
+layout_mode = 0
+offset_right = 54.0
+offset_bottom = 31.0
+text = "Drive!"
+
+[connection signal="pressed" from="BuildScreen/ToggleMode" to="." method="_on_toggle_mode_pressed"]
