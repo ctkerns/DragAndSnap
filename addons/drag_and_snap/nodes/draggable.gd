@@ -9,8 +9,10 @@ var _snap_point = null
 
 func _enter_tree():
 	update_configuration_warnings()
+
+	assert(get_parent() != null, "ERROR: Draggable is a component and cannot be the scene root.")
 	
-	assert(get_parent() is CollisionObject3D, "Component must be applied to a CollisionObject3D derived node.")
+	assert(get_parent() is CollisionObject3D, "ERROR: Component must be applied to a CollisionObject3D derived node.")
 	if not get_parent().is_connected("input_event", Callable(self, "_on_input_event")):
 		get_parent().connect("input_event", Callable(self, "_on_input_event"))
 
@@ -25,6 +27,9 @@ func _ready():
 func _get_configuration_warnings():
 	var warnings = PackedStringArray()
 	
+	if get_parent() == null:
+		warnings.push_back("Draggable is a component and cannot be the scene root.")
+
 	# Parent is not the correct type.
 	if not get_parent() is CollisionObject3D:
 		warnings.push_back("Component must be applied to a CollisionObject3D derived node.")
