@@ -10,7 +10,7 @@ var _snap_point = null
 func _enter_tree():
 	update_configuration_warnings()
 
-	assert(get_parent() != null, "ERROR: Draggable is a component and cannot be the scene root.")
+	assert(get_parent() != get_tree().get_root(), "ERROR: Draggable is a component and must be a child of another node.")
 	
 	assert(get_parent() is CollisionObject3D, "ERROR: Component must be applied to a CollisionObject3D derived node.")
 	if not get_parent().is_connected("input_event", Callable(self, "_on_input_event")):
@@ -18,7 +18,7 @@ func _enter_tree():
 
 func _ready():
 	# At run time, a draggable object can not be the scene root.
-	assert(get_parent().get_parent() != null, "ERROR: At runtime, a draggable object can not be the scene root.")
+	assert(get_parent().get_parent() != get_tree().get_root(), "ERROR: At runtime, a draggable object must be a child of another node.")
 
 	# For snapping.
 	_original_parent = get_parent().get_parent()
@@ -27,8 +27,8 @@ func _ready():
 func _get_configuration_warnings():
 	var warnings = PackedStringArray()
 	
-	if get_parent() == null:
-		warnings.push_back("Draggable is a component and cannot be the scene root.")
+	if self == get_tree().get_edited_scene_root():
+		warnings.push_back("Draggable is a component and must be a child of another node.")
 
 	# Parent is not the correct type.
 	if not get_parent() is CollisionObject3D:
