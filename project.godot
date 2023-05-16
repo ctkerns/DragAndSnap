@@ -15,6 +15,14 @@ run/main_scene="res://demos/car builder/CarBuilder.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+DragSnap="*res://addons/drag_and_snap/nodes/drag_snap.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/drag_and_snap/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method.mobile="gl_compatibility"

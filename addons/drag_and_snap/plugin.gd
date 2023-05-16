@@ -2,7 +2,9 @@
 extends EditorPlugin
 
 func _enter_tree() -> void:
-	add_custom_type("Draggable", "RigidBody3D",
+	add_autoload_singleton("DragSnap", "res://addons/drag_and_snap/nodes/drag_snap.gd")
+	
+	add_custom_type("Draggable", "Node",
 		preload("res://addons/drag_and_snap/nodes/draggable.gd"),
 		null
 	)
@@ -12,5 +14,7 @@ func _enter_tree() -> void:
 	)
 
 func _exit_tree() -> void:
+	remove_autoload_singleton("DragSnap")
+	
 	remove_custom_type("Draggable")
 	remove_custom_type("SnapPoint")
