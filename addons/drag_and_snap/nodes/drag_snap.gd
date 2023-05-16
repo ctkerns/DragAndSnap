@@ -75,8 +75,8 @@ func snap(point: SnapPoint):
 	if _dragged_object.is_ancestor_of(point):
 		return
 
-	_dragged_object.reparent(point)
-	_dragged_object.set_transform(Transform3D())
+	_dragged_object.reparent(point.get_parent())
+	_dragged_object.set_transform(point.get_transform())
 
 	_dragged_object.find_child("Draggable").set_snap_point(point)
 
