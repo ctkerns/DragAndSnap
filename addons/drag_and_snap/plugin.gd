@@ -12,9 +12,14 @@ func _enter_tree() -> void:
 		preload("res://addons/drag_and_snap/nodes/snap_point.gd"),
 		null
 	)
+	add_custom_type("SnapSurface", "Node",
+		preload("res://addons/drag_and_snap/nodes/snap_surface.gd"),
+		null
+	)
 
 func _exit_tree() -> void:
 	remove_autoload_singleton("DragSnap")
 	
 	remove_custom_type("Draggable")
 	remove_custom_type("SnapPoint")
+	remove_custom_type("SnapSurface")

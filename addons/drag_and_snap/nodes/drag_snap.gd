@@ -54,8 +54,8 @@ func check_snap(from: Vector3, to: Vector3):
 	# Setup query.
 	var params = PhysicsRayQueryParameters3D.create(from, to*1000000.0)
 	params.set_collide_with_areas(true)
-	params.set_collide_with_bodies(false)
-	# TODO: Set mask to snap point's collision mask to avoid interference.
+	params.set_exclude([_dragged_object.get_rid()])
+	# TODO: Set mask to snap point's collision mask to avoid interference?
 	
 	# Query point.
 	var space_rid = _selector.get_world_3d().space
@@ -65,12 +65,15 @@ func check_snap(from: Vector3, to: Vector3):
 	# Found collision with snap point.
 	if not collider.is_empty() and collider['collider'] is SnapPoint:
 		if not _dragged_object.find_child("Draggable").is_snapped():
-			snap(collider['collider'])
+			snap_to_point(collider['collider'])
+	# Found collision with snap surface.
+	elif not collider.is_empty() and collider['collider'].find_child("SnapSurface") is SnapSurface:
+		snap_to_surface(collider['collider'].find_child("SnapSurface"), collider['position'], collider['normal'])
 	# No snap point collision found.
 	elif _dragged_object.find_child("Draggable").is_snapped():
 		unsnap()
 
-func snap(point: SnapPoint):
+func snap_to_point(point: SnapPoint):
 	# Double check the snap point is not a descendent of the dragged object.
 	if _dragged_object.is_ancestor_of(point):
 		return
@@ -78,10 +81,26 @@ func snap(point: SnapPoint):
 	_dragged_object.reparent(point.get_parent())
 	_dragged_object.set_transform(point.get_transform())
 
-	_dragged_object.find_child("Draggable").set_snap_point(point)
+	_dragged_object.find_child("Draggable").set_snapped(point)
+
+func snap_to_surface(surface: SnapSurface, position, normal):
+	# Double check the snap surface is not a descendent of the dragged object.
+	if _dragged_object.is_ancestor_of(surface):
+		return
+	
+	var new_parent = surface.get_parent()
+	if _dragged_object.get_parent() != new_parent:
+		_dragged_object.reparent(new_parent)
+	
+	# Reposition dragged object so it's up vector is parallel to the collision normal.
+	var angle = normal.angle_to(Vector3.UP)
+	var pivot = normal.cross(Vector3.UP).normalized()
+	_dragged_object.global_transform = Transform3D(Basis(pivot, -angle), position)
+	
+	_dragged_object.find_child("Draggable").set_snapped(surface)
 
 func unsnap():
 	_dragged_object.reparent(_dragged_object.find_child("Draggable").get_original_parent())
 	_dragged_object.set_rotation(_dragged_object.find_child("Draggable").get_original_rotation())
 
-	_dragged_object.find_child("Draggable").set_snap_point(null)
+	_dragged_object.find_child("Draggable").set_snapped(null)

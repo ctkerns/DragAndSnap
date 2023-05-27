@@ -5,7 +5,7 @@ class_name Draggable
 # Snapping.
 var _original_parent
 var _original_rotation
-var _snap_point = null
+var _snapped_to = null
 
 func _enter_tree():
 	update_configuration_warnings()
@@ -46,10 +46,10 @@ func _on_input_event(camera, event, _position, _normal, _shape_idx):
 		DragSnap.start_drag(camera, get_parent())
 
 func is_snapped():
-	return _snap_point != null
+	return _snapped_to != null
 
-func set_snap_point(snap_point):
-	_snap_point = snap_point
+func set_snapped(snapped_to):
+	_snapped_to = snapped_to
 
 func get_original_parent():
 	return _original_parent
