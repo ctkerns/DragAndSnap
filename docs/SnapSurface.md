@@ -12,7 +12,7 @@ When the mouse ray intersects with the SnapSurface object while dragging, the dr
 
 When the mouse ray is moved off of the SnapSurface object while dragging, the dragged object is unsnapped and retains its original transform.
 
-A SnapSurface object can have unlimited Draggable objects attached.
+A SnapSurface object can have unlimited [Draggable](./Draggable.md) objects attached.
 
 ## Signals
 
