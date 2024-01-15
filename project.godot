@@ -13,7 +13,7 @@ config_version=5
 config/name="Drag And Snap"
 run/main_scene="res://demos/car builder/CarBuilder.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://Drag and Snap Logo.svg"
 
 [autoload]
 
