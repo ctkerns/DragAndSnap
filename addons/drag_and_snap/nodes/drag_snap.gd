@@ -1,6 +1,6 @@
 extends Node
 
-# Drag and drop.
+# Save the state of a drag event.
 var _held = false
 var _selector: Camera3D
 var _dragged_object
@@ -17,22 +17,32 @@ func start_drag(selector, dragged_object):
 # Move the dragged object.
 func _process(_delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and _held:
+		# Find location the mouse is pointing at.
 		var selector_pos = _selector.get_global_position()
 		var ray_normal = get_ray(_selector)
 		update_tangent_plane()
 		var intersection = _tangent_plane.intersects_ray(selector_pos, ray_normal)
+
+		# Snap or drag the object.
 		if intersection != null:
 			check_snap(selector_pos, ray_normal)
 			if not _dragged_object.find_child("Draggable").is_snapped():
-				# Drag to new position.
-				var target_motion = intersection - _dragged_object.get_position()
-				var collision = _dragged_object.move_and_collide(target_motion, false)
-			
-				# Bootleg move_and_slide.
-				if collision != null:
-					_dragged_object.move_and_collide(target_motion - target_motion.project(-collision.get_normal()))
+				if _dragged_object is PhysicsBody3D:
+					move_with_physics(intersection - _dragged_object.get_position())
+				else:
+					_dragged_object.set_position(intersection)
+
 	else:
 		_held = false
+
+# Move a draggable object using physics.
+func move_with_physics(target_motion):
+	# Drag to new position.
+	var collision = _dragged_object.move_and_collide(target_motion, false)
+
+	# Bootleg move_and_slide.
+	if collision != null:
+		_dragged_object.move_and_collide(target_motion - target_motion.project(-collision.get_normal()))
 
 # Create a plane the drag is locked to or update the orientation of the existing plane.
 func update_tangent_plane(starting_position = null):
@@ -50,6 +60,7 @@ func get_ray(selector: Camera3D) -> Vector3:
 	var mouse_pos = selector.get_viewport().get_mouse_position()
 	return selector.project_ray_normal(mouse_pos)
 
+# Check if snap is possible, then snap/unsnap.
 func check_snap(from: Vector3, to: Vector3):
 	# Setup query.
 	var params = PhysicsRayQueryParameters3D.create(from, to*1000000.0)
