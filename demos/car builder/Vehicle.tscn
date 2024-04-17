@@ -1,12 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://duegg2evk5pe2"]
+[gd_scene load_steps=7 format=3 uid="uid://duegg2evk5pe2"]
 
-[ext_resource type="Script" path="res://demos/car builder/Vehicle.gd" id="1_upp5v"]
+[ext_resource type="Script" path="res://demos/car builder/VehicleRoot.gd" id="1_vfvki"]
+[ext_resource type="Script" path="res://addons/drag_and_snap/nodes/draggable.gd" id="2_ln22c"]
+[ext_resource type="Script" path="res://addons/drag_and_snap/nodes/snap_point.gd" id="3_l2v8k"]
+[ext_resource type="Script" path="res://addons/drag_and_snap/nodes/snap_surface.gd" id="4_6tvgd"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cp5in"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a6ou5"]
 size = Vector3(1, 0.5, 2)
 
 [node name="Vehicle" type="VehicleBody3D"]
-script = ExtResource("1_upp5v")
+mass = 400.0
+script = ExtResource("1_vfvki")
+
+[node name="Draggable" type="Node" parent="."]
+script = ExtResource("2_ln22c")
+
+[node name="SnapPoint" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42377, 0)
+script = ExtResource("3_l2v8k")
+snap_shape = SubResource("SphereShape3D_cp5in")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.5, -4)
@@ -16,6 +30,9 @@ shape = SubResource("BoxShape3D_a6ou5")
 
 [node name="Body" type="CSGBox3D" parent="."]
 size = Vector3(1, 0.5, 2)
+
+[node name="SnapSurface" type="Node" parent="Body"]
+script = ExtResource("4_6tvgd")
 
 [node name="Wheel1" type="VehicleWheel3D" parent="."]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.75, -0.25, -1)

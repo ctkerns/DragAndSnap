@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2ldgwducfdu5"]
+
+[ext_resource type="Material" uid="uid://bgpng8iaxy78q" path="res://demos/car builder/StrutMaterial.tres" id="1_5olto"]
+[ext_resource type="Script" path="res://addons/drag_and_snap/nodes/draggable.gd" id="2_2s2tb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_21loa"]
+size = Vector3(0.45, 0.35, 0.35)
+
+[node name="RaceWheelMount" type="Area3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0)
+shape = SubResource("BoxShape3D_21loa")
+
+[node name="Base" type="CSGBox3D" parent="."]
+material_override = ExtResource("1_5olto")
+size = Vector3(0.08, 0.4, 0.4)
+
+[node name="WheelMount" type="CSGBox3D" parent="Base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
+size = Vector3(0.08, 0.25, 0.25)
+
+[node name="Strut" type="CSGBox3D" parent="Base"]
+transform = Transform3D(0.17101, -0.969846, 0.173648, 0.984808, 0.173648, 0, -0.0301537, 0.17101, 0.984808, 0.2, 0.15, 0.15)
+size = Vector3(0.05, 0.5, 0.05)
+
+[node name="Strut3" type="CSGBox3D" parent="Base"]
+transform = Transform3D(0.17101, -0.969846, -0.173648, 0.984808, 0.173648, 0, 0.0301537, -0.17101, 0.984808, 0.2, 0.15, -0.15)
+size = Vector3(0.05, 0.5, 0.05)
+
+[node name="Strut4" type="CSGBox3D" parent="Base"]
+transform = Transform3D(-0.17101, -0.969846, -0.173648, 0.984808, -0.173648, 0, -0.0301537, -0.17101, 0.984808, 0.2, -0.15, -0.15)
+size = Vector3(0.05, 0.5, 0.05)
+
+[node name="Strut2" type="CSGBox3D" parent="Base"]
+transform = Transform3D(-0.17101, -0.969846, 0.173648, 0.984808, -0.173648, 0, 0.0301537, 0.17101, 0.984808, 0.2, -0.15, 0.15)
+size = Vector3(0.05, 0.5, 0.05)
+
+[node name="Draggable" type="Node" parent="."]
+script = ExtResource("2_2s2tb")

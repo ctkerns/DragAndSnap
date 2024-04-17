@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://c10eedgj1yvog"]
+
+[ext_resource type="PackedScene" uid="uid://c8lchk200mjl6" path="res://demos/car builder/parts/VehicleBodyTemplate.tscn" id="1_lc5r6"]
+[ext_resource type="Material" uid="uid://qa163f1b7kvv" path="res://demos/car builder/CarBodyMaterial.tres" id="2_0s6w4"]
+[ext_resource type="ArrayMesh" uid="uid://cmhp7ypt2rco1" path="res://demos/car builder/parts/RaceBody/RaceBody.obj" id="2_r57kk"]
+[ext_resource type="Script" path="res://addons/drag_and_snap/nodes/snap_point.gd" id="4_vnuda"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_htwrp"]
+points = PackedVector3Array(0.88632, -0.22636, 2.06295, 0.180977, -0.111064, 2.6738, 0.799562, -0.297607, 2.59142, 0.88632, -0.396218, 2.06295, 0.745078, 0.0181648, -0.692007, 0.245005, 0.44114, -0.726187, -0.189827, -0.111064, 2.6738, 0.180977, -0.411151, 2.6738, 0.799562, -0.396218, 2.59142, 0.383123, -0.411151, -1.16088, 0.745078, -0.328391, -0.692007, 0.245005, 0.0863247, -1.80284, 0.245005, 0.422119, -0.929511, -0.253854, 0.44114, -0.726187, -0.88632, -0.22636, 2.06295, -0.799735, -0.297607, 2.59142, -0.189827, -0.411151, 2.6738, 0.245005, -0.411151, -1.32652, 0.245005, -0.304865, -1.80284, -0.253854, 0.0863247, -1.80284, -0.253854, 0.422119, -0.929511, -0.753754, 0.0181648, -0.692007, -0.715233, -0.00627938, 0.5034, -0.88632, -0.396218, 2.06295, -0.799735, -0.396218, 2.59142, -0.399434, -0.411151, -1.15212, -0.253854, -0.411151, -1.32652, -0.253854, -0.304865, -1.80284, -0.753754, -0.328391, -0.692007)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_k8ikb"]
+
+[node name="RaceBody" instance=ExtResource("1_lc5r6")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1"]
+material_override = ExtResource("2_0s6w4")
+mesh = ExtResource("2_r57kk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
+shape = SubResource("ConvexPolygonShape3D_htwrp")
+
+[node name="FrontLeft" type="Area3D" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.2, 1.5)
+script = ExtResource("4_vnuda")
+snap_shape = SubResource("SphereShape3D_k8ikb")
+
+[node name="RearLeft" type="Area3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.2, -1.6)
+script = ExtResource("4_vnuda")
+snap_shape = SubResource("SphereShape3D_k8ikb")
+
+[node name="FrontRight" type="Area3D" parent="." index="6"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -0.3, -0.2, 1.5)
+script = ExtResource("4_vnuda")
+snap_shape = SubResource("SphereShape3D_k8ikb")
+
+[node name="RearRight" type="Area3D" parent="." index="7"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -0.3, -0.2, -1.6)
+script = ExtResource("4_vnuda")
+snap_shape = SubResource("SphereShape3D_k8ikb")

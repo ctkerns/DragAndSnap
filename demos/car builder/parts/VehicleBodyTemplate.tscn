@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8lchk200mjl6"]
+
+[ext_resource type="Script" path="res://demos/car builder/VehicleRoot.gd" id="1_5lbxe"]
+[ext_resource type="Script" path="res://addons/drag_and_snap/nodes/draggable.gd" id="2_3r5k8"]
+
+[node name="VehicleRoot" type="VehicleBody3D"]
+script = ExtResource("1_5lbxe")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 1.5, -4)
+
+[node name="Draggable" type="Node" parent="."]
+script = ExtResource("2_3r5k8")

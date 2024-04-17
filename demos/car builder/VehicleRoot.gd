@@ -1,4 +1,5 @@
 extends VehicleBody3D
+class_name VehicleRoot
 
 @onready var camera = $Camera3D
 
@@ -18,13 +19,13 @@ func edit():
 func _physics_process(delta):
 	# Gas.
 	if Input.is_key_pressed(KEY_W):
-		set_engine_force(100.0)
+		set_engine_force(1000.0)
 		set_brake(0.0)
 	# Brake and reverse.
 	elif Input.is_key_pressed(KEY_S):
 		# Reverse.
 		if get_linear_velocity().dot(get_transform().basis.z) < 2.0:
-			set_engine_force(-20.0)
+			set_engine_force(-200.0)
 		# Brake.
 		else:
 			set_brake(2.0)
